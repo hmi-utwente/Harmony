@@ -1,0 +1,55 @@
+<behaviourtemplates>
+
+    <is name="systemRestarter">
+        {
+            "requestSystemRestart":false,
+            "initialised":false,
+            "settings": {
+                "systemRestarterPropertiesFilename":"Prototype1/config/SystemRestarter.properties"
+            }
+        }
+    </is>
+    
+	<javascript>
+		<![CDATA[
+
+        ]]>
+    </javascript>
+
+	<template id="initializeSystemRestarter" name="initializeSystemRestarter"> 
+	    <preconditions>
+	    	<condition>!is.systemRestarter.initialised</condition>
+            
+	    </preconditions>
+	    <initeffects>
+			<method name="init" is="is.systemRestarter.initialised">
+			  <object persistent="is.systemRestarter.persistent.theSystemRestarter" class="flipper.SystemRestarter">  
+			    <constructors>
+			           <value class="String" is="is.systemRestarter.settings.systemRestarterPropertiesFilename"/>
+			    </constructors>       
+			  </object>  
+			  <arguments></arguments>
+			</method>
+      	</initeffects>
+	    <effects>
+	    </effects>
+  	</template>
+    
+    <template id="DoSystemRestart" name="DoSystemRestart">
+      <preconditions>
+     	<condition>is.systemRestarter.initialised</condition>
+        <condition>is.systemRestarter.requestSystemRestart</condition>
+        <condition>!is.harmony.busy</condition>
+      </preconditions>
+      <effects>
+          <behaviour name="doSystemRestart">
+            <object class="flipper.SystemRestarter" persistent="is.systemRestarter.persistent.theSystemRestarter"/>
+            <arguments>
+            </arguments>
+          </behaviour>
+          <assign is="is.systemRestarter.requestSystemRestart">false</assign>
+			<assign is="is.logger.latestLogLine">logInfo("Session ended - Initiating system restart")</assign>
+      </effects>
+    </template>
+
+</behaviourtemplates>

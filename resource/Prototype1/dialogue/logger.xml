@@ -1,0 +1,73 @@
+<behaviourtemplates>
+
+
+    <is name="logger">
+        {
+            "initialised":false,
+            "latestLogLine" : "",
+            "error" : "",
+            "warn" : "",
+            "info" : "",
+            "settings" : {"loggerToMWPropertiesFilename":"Prototype1/config/loggerToMW.properties"},
+            "debug" : ""
+        }
+    </is>
+	<javascript>
+		<![CDATA[
+			var logInfoRequests = [];
+			function logInfo(msg){
+				logInfoRequests.push(msg);
+				return msg;
+			}
+			
+			function existsNextLogInfoRequest(){
+				return logInfoRequests.length > 0;
+			}
+			
+			function getNextLogInfoRequest(){
+				nextLogInfoRequest = logInfoRequests[0];
+				logInfoRequests.shift();
+				return nextLogInfoRequest;
+			}
+        ]]>
+    </javascript>
+
+
+
+	<template id="initializeLogger" name="initializeLogger"> 
+	    <preconditions>
+	    	<condition>!is.logger.initialised</condition>
+            
+	    </preconditions>
+	    <initeffects>
+			<method name="init" is="is.logger.initialised">
+			  <object persistent="is.logger.persistent.theLoggerWrapper" class="flipper.LoggerWrapper">  
+			    <constructors>
+			           <value class="String" is="is.logger.settings.loggerToMWPropertiesFilename"/>
+			    </constructors>       
+			  </object>  
+			  <arguments></arguments>
+			</method>
+      	</initeffects>
+	    <effects>
+	    </effects>
+  	</template>
+    
+    <template id="logInfo" name="logInfo">
+      <preconditions>
+     	<condition>is.logger.initialised</condition>
+     	<condition>existsNextLogInfoRequest()</condition>
+      </preconditions>
+      <effects>
+          <assign is="is.logger.info">getNextLogInfoRequest()</assign>
+          <method name="info">
+            <object class="flipper.LoggerWrapper" persistent="is.logger.persistent.theLoggerWrapper"/>
+            <arguments>
+              <value class="String" is="is.logger.info" is_type="JSONString"/>
+            </arguments>
+          </method>
+          <assign is="is.logger.info">""</assign>
+      </effects>
+    </template>
+    
+</behaviourtemplates>

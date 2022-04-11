@@ -1,0 +1,176 @@
+<behaviourtemplates>
+
+	<is name="harmony">
+		{	
+			"busy" : false,
+			"request" : "",
+			"behaviour" : "",
+			"prevRequest" : ""
+		}
+	</is>
+	
+	<javascript>
+		<![CDATA[
+			function roundTo(n, digits) {
+			    var negative = false;
+			    if (digits === undefined) {
+			        digits = 0;
+			    }
+			        if( n < 0) {
+			        negative = true;
+			      n = n * -1;
+			    }
+			    var multiplicator = Math.pow(10, digits);
+			    n = parseFloat((n * multiplicator).toFixed(11));
+			    n = (Math.round(n) / multiplicator).toFixed(2);
+			    if( negative ) {    
+			        n = (n * -1).toFixed(2);
+			    }
+			    return +n;
+			}
+			
+			var harmonyBehaviourRequests = [];
+			
+			function addHarmonyBehaviourRequest(behaviour){
+				harmonyBehaviourRequests.push(behaviour);
+				return harmonyBehaviourRequests.length;
+			}
+			
+			function isPendingHarmonyBehaviour(){
+				return harmonyBehaviourRequests.length > 0;
+			}
+			
+			function getNextHarmonyBehaviourRequest(){
+	            var nextRequest = harmonyBehaviourRequests[0];
+	            harmonyBehaviourRequests.shift();
+	            return nextRequest;
+	        }
+	        
+			function createZB(action){
+				if(typeof action === "undefined"){
+					log("!!!doing an undefined action!!!");
+				}
+				
+				//are we dealing with a combined audio/animation sequence, or just one of the two?
+				if(action.hasOwnProperty("audio") && action.hasOwnProperty("audioDuration") && action.hasOwnProperty("animation") && action.hasOwnProperty("animationDuration")){
+					var filename = "animationAudioBehaviour";
+					var audio = action.audio;
+					var audioDuration = action.audioDuration;
+					var animation = action.animation;
+					var animationDuration = action.animationDuration;
+				} else if(!action.hasOwnProperty("audio") && action.hasOwnProperty("animation") && action.hasOwnProperty("animationDuration")){
+					var filename = "animationBehaviour";
+					var audio = "";
+					var audioDuration = 0;
+					var animation = action.animation;
+					var animationDuration = action.animationDuration;
+				} else if(action.hasOwnProperty("audio") && action.hasOwnProperty("audioDuration") && !action.hasOwnProperty("animation")){
+					var filename = "audioBehaviour";
+					var audio = action.audio;
+					var audioDuration = action.audioDuration;
+					var animation = "";
+					var animationDuration = 0;
+				}
+				
+				//construct the behaviour request object
+				var behaviour = new Object();
+				behaviour.action = is.harmony.request;
+				behaviour.audioDuration = audioDuration;
+				behaviour.animationDuration = animationDuration;
+				behaviour.startTime = 0;
+				behaviour.duration = roundTo(audioDuration+animationDuration+delay, 2);
+				behaviour.template = filename;
+				if(action.hasOwnProperty("reverseOrder") && action.reverseOrder){					
+					behaviour.placeholders = [{"language":is.harmony.language},{"animate1":animation},{"animate1_delay":delay},{"speak1":audio},{"speak1_delay":animationDuration+delay}];
+				} else {
+					behaviour.placeholders = [{"language":is.harmony.language},{"animate1":animation},{"animate1_delay":audioDuration+delay},{"speak1":audio},{"speak1_delay":delay}];
+				}
+				return behaviour;
+			}
+			
+			function createHarmonyLogLine(behaviour){
+				return "Doing Harmony action: ["+behaviour.action+"] using BML template: ["+behaviour.template+"] with a total duration of: ["+behaviour.duration+"] seconds. Audio: ["+behaviour.placeholders[2].speak1+"] duration: ["+behaviour.audioDuration+"]. Animation:["+behaviour.placeholders[0].animate1+"] duration: ["+behaviour.animationDuration+"]";
+			}
+			
+			
+		]]>
+    </javascript>
+
+    <!-- this checks if there are any queued behaviours for Harmony -->
+    <template id="doNextBehaviourInQueue" name="doNextBehaviourInQueue">
+    	<preconditions mode="and">
+    		<condition>!is.harmony.busy</condition>
+    		<condition>is.harmony.request === ""</condition>
+    		<condition>isPendingHarmonyBehaviour()</condition>
+    	</preconditions>
+    	<effects>
+    		<assign is="is.harmony.request">getNextHarmonyBehaviourRequest()</assign>
+    	</effects>
+    </template>
+      
+    <!-- Must always be near the top of the file, so we can ignore stuff while Harmony is already busy -->
+    <template id="ignoreWhileBusy" name="ignoreWhileBusy">
+    	<preconditions mode="and">
+    		<condition>is.harmony.busy</condition>
+    		<condition>is.harmony.request !== ""</condition>
+    	</preconditions>
+    	<effects>
+			<assign is="is.logger.latestLogLine">logInfo("Harmony is currently busy with action: ["+is.harmony.behaviour.action+"] dropping action request ["+is.harmony.request+"]")</assign>
+    		<assign is="is.harmony.request">""</assign>
+    	</effects>
+    </template>
+    
+    <template id="storeRequest" name="storeRequest">
+    	<preconditions mode="and">
+    		<condition>is.harmony.request !== ""</condition>
+    		<condition>is.harmony.request !== "repeatLast"</condition>
+    	</preconditions>
+    	<effects>
+    		<assign is="is.harmony.prevRequest">is.harmony.request</assign>
+    	</effects>
+    </template>
+    
+    <!-- REPEAT - special action request, basically just repeats the previous request -->
+    <template id="repeatLast" name="repeatLast">
+		<preconditions mode="and">
+			<condition>is.harmony.request === "repeatLast"</condition>
+		</preconditions>
+		<effects>
+			<assign is="is.harmony.request">is.harmony.prevRequest</assign>
+		</effects>
+	</template>
+
+	<!-- Following templates are responsible for starting behaviours, and then going back to idle when duration finishes -->
+	<template id="startBehaviour" name="startBehaviour">
+		<preconditions mode="and">
+			<condition>is.harmony.behaviour !== ""</condition>
+			<condition>is.harmony.behaviour.startTime === 0</condition>
+		</preconditions>
+		<effects>
+			<assign is="is.logger.latestLogLine">logInfo(createHarmonyLogLine(is.harmony.behaviour))</assign>
+			<assign is="is.harmony.busy">true</assign>is.adult.menuRefresh
+			<assign is="is.harmony.behaviour.startTime">is.behaviourplanner.time</assign>
+			<assign is="is.harmony.bmlId">addBehaviourRequest(is.harmony.behaviour)</assign>
+		</effects>
+	</template>
+	<template id="backToIdle" name="backToIdle">
+		<preconditions mode="and">
+			<condition>is.harmony.behaviour !== ""</condition>
+			<condition><![CDATA[is.behaviourplanner.time > is.harmony.behaviour.startTime + is.harmony.behaviour.duration*1000]]></condition>
+		</preconditions>
+		<effects>
+			<assign is="is.harmony.busy">false</assign>
+			<assign is="is.harmony.behaviour">""</assign>
+		</effects>
+	</template>
+    
+	<!-- Always at the end, to remove the current request -->
+    <template id="cleanupRequest" name="cleanupRequest">
+    	<preconditions mode="and">
+    		<condition>is.harmony.request !== ""</condition>
+    	</preconditions>
+    	<effects>
+    		<assign is="is.harmony.request">""</assign>
+    	</effects>
+    </template>
+</behaviourtemplates>

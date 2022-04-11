@@ -1,0 +1,45 @@
+
+<configuration debug="true">
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+	
+	<appender name="STDOUT"
+    class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>
+        %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+     </pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${user.home}/experiment_logs/log_${bySecond}.log</file>
+    <append>true</append>
+    <encoder>
+        <pattern>
+          %d{yyyyMMdd HH:mm:ss.SSS} - [%thread] - %-5level - %logger{36} - %msg%n
+        </pattern>
+    </encoder>
+  </appender>
+  
+  <root level="INFO">
+         <appender-ref ref="STDOUT" />
+  </root>
+  
+  <logger name="EventLog" level="INFO">
+    <appender-ref ref="FILE" />
+  </logger>
+  
+
+  <logger name="hmi.flipper2" level="ERROR" additivity="false">
+         <appender-ref ref="STDOUT" />
+  </logger>
+  <logger name="nl.utwente" level="ERROR" additivity="false">
+         <appender-ref ref="STDOUT" />
+  </logger>
+  <logger name="asap.realizer" level="ERROR" additivity="false">
+         <appender-ref ref="STDOUT" />
+  </logger>
+  <logger name="flipper" level="ERROR" additivity="false">
+         <appender-ref ref="STDOUT" />
+  </logger>
+</configuration>

@@ -1,0 +1,39 @@
+<zenobinding>
+
+    <!-- Zeno-specific bindings -->
+    <ZenoUnitSpec type="speak" namespace="http://hmi.ewi.utwente.nl/zenoengine">
+        <constraints>
+        </constraints>
+        <parametermap>
+            <parameter src="text" dst="text"/>
+        </parametermap>
+        <ZenoUnit type="SpeakZU"/>
+    </ZenoUnitSpec>
+   
+    <ZenoUnitSpec type="animation" namespace="http://hmi.ewi.utwente.nl/zenoengine">
+        <constraints>
+        </constraints>
+        <parametermap>
+            <parameter src="animation" dst="animation"/>
+        </parametermap>
+        <ZenoUnit type="AnimationZU"/>
+    </ZenoUnitSpec>
+    
+    <ZenoUnitSpec type="stopAnimation" namespace="http://hmi.ewi.utwente.nl/zenoengine">
+        <constraints>
+        </constraints>
+        <parametermap>
+        </parametermap>
+        <ZenoUnit type="StopAnimationZU"/>
+    </ZenoUnitSpec>
+
+        <ZenoUnitSpec type="lookAt" namespace="http://hmi.ewi.utwente.nl/zenoengine">
+        <constraints>
+        </constraints>
+        <parametermap>
+            <parameter src="x" dst="x"/>
+            <parameter src="y" dst="y"/>
+        </parametermap>
+        <ZenoUnit type="LookAtZU"/>
+    </ZenoUnitSpec>
+</zenobinding>

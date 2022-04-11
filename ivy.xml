@@ -1,0 +1,37 @@
+<ivy-module version="2.0">
+   <info organisation="HMI" module="HarmonyStarters"/>
+   <configurations>
+      <include file="${ivy.settings.dir}/configurations.xml"/>
+   </configurations>
+   <dependencies>
+   
+     <dependency org="HMI"   name="HmiMiddlewareAbstractionLayer"     rev="latest.${resolve.status}"   />  
+     <!-- dependency org="Asap"   name="AsapMiddlewareEngine"     rev="latest.${resolve.status}"   /-->     
+     <dependency org="Asap"   name="AsapMiddlewareRealizerAdapters"     rev="latest.${resolve.status}"   />    
+     
+      <dependency org="HMI"   name="HmiJComponentEnvironment"     rev="latest.${resolve.status}"   />    
+      <dependency org="HMI"   name="HmiEnvironmentBase"     rev="latest.${resolve.status}"   />    
+      <dependency org="HMI"   name="HmiAudioEnvironment"     rev="latest.${resolve.status}"   />   
+
+      <dependency org="HMI"   name="HmiUtil"            transitive="false" rev="latest.${resolve.status}"   />
+      <dependency org="HMI"   name="HmiXml"             transitive="false" rev="latest.${resolve.status}"   />
+
+      <dependency org="Asap"   name="AsapBML"     rev="latest.${resolve.status}"   />    
+      <dependency org="Asap"   name="AsapRealizerPort"     rev="latest.${resolve.status}"   />    
+      <dependency org="Asap"   name="AsapRealizer"     rev="latest.${resolve.status}"   />
+      <dependency org="Asap"   name="AsapEnvironment"     rev="latest.${resolve.status}"   />
+      <dependency org="Asap"   name="AsapRealizerEmbodiments"     rev="latest.${resolve.status}"   />   
+      <dependency org="Asap"   name="AsapBinding"         rev="latest.${resolve.status}"   /> 
+      <dependency org="Asap"   name="AsapAudioEngine"     rev="latest.${resolve.status}"   />   
+        <dependency org="Asap" name="AsapEmitterEngine" rev="latest.${resolve.status}"/>
+      
+      <dependency org="slf4j"     name="slf4j-api"               rev="latest.release"  />   
+      <dependency org="jcip"    name="jcip-annotations"      rev="latest.release"  />
+	  <dependency org="logback"  name="logback-classic"    rev="latest.release"  />   
+      <dependency org="logback"  name="logback-core"       rev="latest.release"  />   
+      <dependency org="google"   name="guava"                rev="latest.${resolve.status}"  />
+      <dependency org="lombok"   name="lombok"         rev="latest.release"  />
+	  <dependency org="saiba"     name="openbmlparser"           rev="latest.release"    />
+
+   </dependencies>
+</ivy-module>

@@ -1,0 +1,68 @@
+<AsapVirtualHuman>
+    <!--  this loader file requires the zenoengine and its resource directory -->
+  
+	<Loader id="realizer" loader="asap.realizerembodiments.AsapRealizerEmbodiment">
+	  <BMLParser>
+	    <BMLAttributeExtension class="asap.bml.ext.bmla.BMLABMLBehaviorAttributes"/>      
+	  </BMLParser>
+	
+	  <BMLScheduler>
+	    <SchedulingHandler class="asap.realizer.scheduler.BMLASchedulingHandler" schedulingStrategy="asap.realizer.scheduler.SortedSmartBodySchedulingStrategy"/>
+	  </BMLScheduler>
+	  <PipeLoader id="pipe" loader="asap.middlewareadapters.loader.MiddlewareToBMLRealizerAdapterLoader">
+		  <MiddlewareOptions loaderclass="nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader">
+            <MiddlewareProperty name="iTopic" value="/topic/ASAPBmlRequest"/>
+            <MiddlewareProperty name="oTopic" value="/topic/ASAPBmlFeedback"/>
+          </MiddlewareOptions>
+	  </PipeLoader>
+	</Loader>
+
+
+  	<!-- Loader id="guiembodiment" loader="asap.realizerembodiments.JFrameEmbodiment">
+        <BmlUI demoscriptresources="P4/behaviours"/>
+        <FeedbackUI/>
+    </Loader-->
+    
+    <Loader id="middlewareembodiment" loader="asap.middlewareengine.embodiment.MiddlewareEmbodiment" requiredloaders="">
+        <MiddlewareOptions loaderclass="nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader">
+            <MiddlewareProperty name="default" value="true"/>
+            <MiddlewareProperty name="iTopic" value="/topic/dummy"/>
+            <MiddlewareProperty name="oTopic" value="/topic/adult_tablet.command"/>
+        </MiddlewareOptions>
+        <MiddlewareOptions loaderclass="nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader">
+            <MiddlewareProperty name="iTopic" value="/topic/dummy"/>
+            <MiddlewareProperty name="oTopic" value="/topic/child_tablet.command"/>
+        </MiddlewareOptions>
+    </Loader>
+
+
+    <Loader id="middlewareengine" loader="asap.middlewareengine.engine.MiddlewareEngineLoader" requiredloaders="middlewareembodiment">
+        <MiddlewareBinding basedir="" resources="Prototype1/bindings/" filename="tablet_behaviorbinding.xml"/>
+    </Loader>
+
+    <Loader id="zenoembodiment" loader="asap.zeno.embodiment.ZenoEmbodiment" requiredloaders="">
+		  <MiddlewareOptions loaderclass="nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader">
+            <MiddlewareProperty name="iTopic" value="/topic/ASAPZenoEngineFeedback"/>
+            <MiddlewareProperty name="oTopic" value="/topic/ASAPZenoEngineAction"/>
+          </MiddlewareOptions>
+    </Loader>
+  
+    <Loader id="zenoengine" loader="asap.zeno.loader.ZenoEngineLoader" requiredloaders="zenoembodiment">
+        <ZenoBinding basedir="" resources="P4/bindings/" filename="zeno_behaviourbinding.xml"/>
+    </Loader>
+  
+   
+   <!-- Engine for playing audio files, nice for sound effects (e.g., clapping) or for prerecorded speech fragments -->
+   <Loader id="audioengine" loader="asap.audioengine.loader.AudioEngineLoader"/>
+   
+    <BMLRouting>
+        <Route behaviourclass="saiba.bml.core.FaceLexemeBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.ext.FaceFacsBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.GestureBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.PostureBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.GazeBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.PointingBehaviour" engineid="zenoengine"/>
+        <Route behaviourclass="saiba.bml.core.HeadBehaviour" engineid="zenoengine"/>
+	</BMLRouting>
+
+</AsapVirtualHuman>

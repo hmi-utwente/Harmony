@@ -1,0 +1,3 @@
+Output of: find . -name "*.wav" -exec ffmpeg -i {} 2>&1 \; | grep ".wav\|Duration"
+
+'./example.wav': Duration: 00:00:00.93

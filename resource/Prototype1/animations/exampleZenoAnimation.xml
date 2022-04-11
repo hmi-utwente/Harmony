@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<Animation>
+	<Version type="Animation">
+		<Name>Emotion_angryV1.xml</Name>
+		<Number>1.1</Number>
+	</Version>
+	<Channels>
+		<Channel id="300" name="Forehead">
+			<MotionPaths>
+				<MotionPath name="path">
+					<Version type="Interpolation">
+						<Name>C-Spline Interpolation</Name>
+						<Number>1.0</Number>
+					</Version>
+					<ControlPoints>
+						<ControlPoint><Time>0.0</Time><Position>0.50</Position></ControlPoint>
+						<ControlPoint><Time>750.0</Time><Position>0.0</Position></ControlPoint>
+						<ControlPoint><Time>2500.0</Time><Position>0.0</Position></ControlPoint>
+						<ControlPoint><Time>3000.0</Time><Position>0.50</Position></ControlPoint>
+					</ControlPoints>
+				</MotionPath>
+			</MotionPaths>
+		</Channel>
+		<Channel id="301" name="Eyelids">
+			<MotionPaths>
+				<MotionPath name="path">
+					<Version type="Interpolation">
+						<Name>C-Spline Interpolation</Name>
+						<Number>1.0</Number>
+					</Version>
+					<ControlPoints>
+						<ControlPoint><Time>0.0</Time><Position>0.87</Position></ControlPoint>
+						<ControlPoint><Time>150.0</Time><Position>0.50</Position></ControlPoint>
+						<ControlPoint><Time>2600.0</Time><Position>0.50</Position></ControlPoint>
+						<ControlPoint><Time>3000.0</Time><Position>0.87</Position></ControlPoint>
+					</ControlPoints>
+				</MotionPath>
+			</MotionPaths>
+		</Channel>
+		<Channel id="320" name="LtSmile">
+			<MotionPaths>
+				<MotionPath name="path">
+					<Version type="Interpolation">
+						<Name>C-Spline Interpolation</Name>
+						<Number>1.0</Number>
+					</Version>
+					<ControlPoints>
+						<ControlPoint><Time>0.0</Time><Position>0.5</Position></ControlPoint>
+						<ControlPoint><Time>150.0</Time><Position>0.5</Position></ControlPoint>
+						<ControlPoint><Time>600.0</Time><Position>0.0</Position></ControlPoint>
+						<ControlPoint><Time>2600.0</Time><Position>0.0</Position></ControlPoint>
+						<ControlPoint><Time>3000.0</Time><Position>0.5</Position></ControlPoint>
+					</ControlPoints>
+				</MotionPath>
+			</MotionPaths>
+		</Channel>
+		<Channel id="322" name="Mouth">
+			<MotionPaths>
+				<MotionPath name="path">
+					<Version type="Interpolation">
+						<Name>C-Spline Interpolation</Name>
+						<Number>1.0</Number>
+					</Version>
+					<ControlPoints>
+						<ControlPoint><Time>0.0</Time><Position>0.16</Position></ControlPoint>
+						<ControlPoint><Time>600.0</Time><Position>0.38</Position></ControlPoint>
+						<ControlPoint><Time>2500.0</Time><Position>0.38</Position></ControlPoint>
+						<ControlPoint><Time>3000.0</Time><Position>0.16</Position></ControlPoint>
+					</ControlPoints>
+				</MotionPath>
+			</MotionPaths>
+		</Channel>
+	</Channels>
+	<AddOns />
+	<ChannelsParameters />
+	<SyncPointGroups />
+</Animation>

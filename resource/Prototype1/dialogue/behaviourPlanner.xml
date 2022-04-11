@@ -1,0 +1,175 @@
+<behaviourtemplates>
+<!--
+This file contains the templates for sending requests to the behaviourplanner
+
+From anywhere in the flipper system, add a new request, and remember the id that the request returns (in case we want to do a sync watch for that requestId, e.g. block end)) using this command:
+    <assign is="is.behaviourplanner.examplerequestid">addBehaviourRequest(is.behaviourplanner.examplerequest)</assign>
+        
+Format of a request:
+
+"examplerequest" : {
+    
+    "template" : "filename",
+    	//the filename of the template that contains the BML
+    
+    "placeholders" : [{"name" : "value"}, {...}]
+    	//the placeholders in the template that need to be filled: $name$ will be replaced by value
+    }
+}
+-->
+
+    <is name="behaviourplanner">
+        {
+            "initialised":false,
+			"time" : "0",
+			"killLingeringBehaviourTimer" : 0,
+			"behaviourMode" : "none",
+			"fps" : 0,
+			"cts" : 0,
+			"prevTime" : 0,
+            "settings": {
+                "bmlPipePropertiesFilename":"Prototype1/config/AsapBMLPipe.properties",
+                "behaviourDir":"Prototype1/behaviours"
+            }
+        }
+    </is>
+	<javascript>
+		<![CDATA[
+
+        var behaviourRequestCounter = Math.floor(Math.random() * 1000000);
+        var behaviourRequests = [];
+        
+        function addBehaviourRequest(request){
+            var requestId = "intent_"+behaviourRequestCounter++;
+            request.requestId = requestId;
+            behaviourRequests.push(request);
+            return requestId;
+        }
+        
+        function existsNextBehaviourRequest(){
+            return behaviourRequests.length>0;
+        }
+        
+        function getNextBehaviourRequest(){
+            var nextRequest = behaviourRequests[0];
+            behaviourRequests.shift();
+            return nextRequest;
+        }
+        
+		function log(str)
+		{
+			print(str);
+			return true;
+		}
+        ]]>
+    </javascript>
+
+
+
+    <!-- only once: connect to the behaviour planner (call empty constructor, set settings) -->
+	<template id="initializeBehaviourPlanner" name="initializeBehaviourPlanner"> 
+	    <preconditions>
+	    	<condition>!is.behaviourplanner.initialised</condition>
+            
+	    </preconditions>
+	    <initeffects>
+			<method name="init" is="is.behaviourplanner.initialised">
+			  <object persistent="is.behaviourplanner.persistent.theBehaviourPlanner" class="flipper.BehaviourPlanner">  
+			    <constructors>
+			           <value class="String" is="is.behaviourplanner.settings.bmlPipePropertiesFilename"/>
+			           <value class="String" is="is.behaviourplanner.settings.behaviourDir"/>
+			    </constructors>       
+			  </object>  
+			  <arguments></arguments>
+			</method>
+      	</initeffects>
+	    <effects>
+	    </effects>
+  	</template>
+    
+    <!-- plan behaviour that is available. So this is the template that will *automatically* be called whenever you added a request. 
+    Note that the request data needs to adhere to the format documented in the top of this file. 
+    Here we should in fact *check* that (in the precondition), and we need to have an error template that says "there is a request but its content does not conform". 
+    So that is a TODO because we do not yet check that. -->
+    <template id="PlanBehaviour" name="PlanBehaviour">
+      <preconditions>
+     	<condition><![CDATA[is.behaviourplanner.initialised]]></condition>
+        <condition><![CDATA[ existsNextBehaviourRequest() ]]></condition>
+      </preconditions>
+      <effects>
+          <assign is="is.behaviourplanner.nextrequest">getNextBehaviourRequest()</assign>
+          <!-- send the request to the behaviour planner -->
+          <behaviour name="planAndSendBehaviour">
+            <object class="flipper.BehaviourPlanner" persistent="is.behaviourplanner.persistent.theBehaviourPlanner"/>
+            <arguments>
+              <value class="String" is="is.behaviourplanner.nextrequest" is_type="JSONString"/>
+            </arguments>
+          </behaviour>
+          <assign is="is.behaviourplanner.nextrequest">""</assign>
+      </effects>
+    </template>
+
+    <!-- This template is still old from DE-ENIGMA and needs to be changed for Harmony-->
+    <template id="KillLingeringBehaviours1" name="KillLingeringBehaviours1">
+      <preconditions>
+     	<condition>is.behaviourplanner.initialised</condition>
+     	<condition>!is.zeno.busy</condition>
+     	<condition>is.zeno.request === ""</condition>
+     	<condition>is.zeno.behaviour === ""</condition>
+        <condition><![CDATA[is.behaviourplanner.time - is.behaviourplanner.killLingeringBehaviourTimer > 60000]]></condition>
+      </preconditions>
+      <effects>
+          <behaviour name="killLingeringBehaviours">
+            <object class="flipper.BehaviourPlanner" persistent="is.behaviourplanner.persistent.theBehaviourPlanner"/>
+            <arguments>
+            </arguments>
+          </behaviour>
+          <assign is="is.behaviourplanner.killLingeringBehaviourTimer">is.behaviourplanner.time</assign>
+          <assign is="is.logger.latestLogLine">logInfo("Sending composition REPLACE signal to ASAP - 1")</assign>
+      </effects>
+    </template>
+
+    <!-- This template is still old from DE-ENIGMA and needs to be changed for Harmony-->
+    <template id="KillLingeringBehaviours2" name="KillLingeringBehaviours2">
+      <preconditions>
+     	<condition>is.behaviourplanner.initialised</condition>
+     	<condition>!is.zeno.busy</condition>
+     	<condition>is.zeno.request === ""</condition>
+     	<condition>is.zeno.behaviour === ""</condition>
+        <condition><![CDATA[is.behaviourplanner.time - is.behaviourplanner.killLingeringBehaviourTimer > 300000]]></condition>
+      </preconditions>
+      <effects>
+          <behaviour name="killLingeringBehaviours">
+            <object class="flipper.BehaviourPlanner" persistent="is.behaviourplanner.persistent.theBehaviourPlanner"/>
+            <arguments>
+            </arguments>
+          </behaviour>
+          <assign is="is.behaviourplanner.killLingeringBehaviourTimer">is.behaviourplanner.time</assign>
+          <assign is="is.logger.latestLogLine">logInfo("Sending composition REPLACE signal to ASAP - 2")</assign>
+      </effects>
+    </template>
+
+	<template id="timer" name="timer">
+      <preconditions>
+     	<condition>true</condition>
+      </preconditions>
+      <effects>
+          <assign is="is.behaviourplanner.time">Date.now()</assign>
+          <assign is="is.behaviourplanner.cts">is.behaviourplanner.cts+1</assign>
+      </effects>
+    </template>
+    
+    
+	<template id="fps" name="fps">
+      <preconditions>
+     	<condition>is.behaviourplanner.time - is.behaviourplanner.prevTime > 10000</condition>
+      </preconditions>
+      <effects>
+          <assign is="is.behaviourplanner.prevTime">is.behaviourplanner.time</assign>
+          <assign is="is.behaviourplanner.fps">is.behaviourplanner.cts/10</assign>
+          <assign is="is.behaviourplanner.lastlog">log(is.behaviourplanner.fps)</assign>
+          <assign is="is.behaviourplanner.cts">0</assign>
+      </effects>
+    </template>
+    
+</behaviourtemplates>
