@@ -1,6 +1,5 @@
 package flipper;
 
-
 import static nl.utwente.hmi.middleware.helpers.JsonNodeBuilders.object;
 
 import java.io.BufferedReader;

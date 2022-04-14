@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="HarmonyStarters"  default="run">
     <import file="../hmibuild/build.xml" />
+    <property file="build.properties"/>
 </project>

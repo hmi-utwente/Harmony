@@ -1,14 +1,14 @@
 <ivy-module version="2.0">
    <info organisation="HMI" module="HarmonyStarters"/>
-   <configurations>
-      <include file="${ivy.settings.dir}/configurations.xml"/>
-   </configurations>
-   <dependencies>
-   
-     <dependency org="HMI"   name="HmiMiddlewareAbstractionLayer"     rev="latest.${resolve.status}"   />  
-     <!-- dependency org="Asap"   name="AsapMiddlewareEngine"     rev="latest.${resolve.status}"   /-->     
+    <configurations>
+       <include file="${ivy.settings.dir}/configurations.xml"/>
+    </configurations>
+    <dependencies>
+
+      <dependency org="HMI"   name="HmiMiddlewareAbstractionLayer"     rev="latest.${resolve.status}"   />
+      <!-- dependency org="Asap"   name="AsapMiddlewareEngine"     rev="latest.${resolve.status}"   /-->
      <dependency org="Asap"   name="AsapMiddlewareRealizerAdapters"     rev="latest.${resolve.status}"   />    
-     
+
       <dependency org="HMI"   name="HmiJComponentEnvironment"     rev="latest.${resolve.status}"   />    
       <dependency org="HMI"   name="HmiEnvironmentBase"     rev="latest.${resolve.status}"   />    
       <dependency org="HMI"   name="HmiAudioEnvironment"     rev="latest.${resolve.status}"   />   
