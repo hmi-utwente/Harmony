@@ -33,6 +33,7 @@
       <dependency org="lombok"   name="lombok"         rev="latest.release"  />
 	  <dependency org="saiba"     name="openbmlparser"           rev="latest.release"    />
 
+	
     <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="latest.release"/>
     <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="latest.release"/>
     <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="latest.release"/>
