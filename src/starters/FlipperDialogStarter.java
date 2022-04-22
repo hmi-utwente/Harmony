@@ -61,8 +61,8 @@ public class FlipperDialogStarter extends FlipperLauncherThread {
 		Properties ps = new Properties();
 		ps.put("iTopic", "/topic/dummyIn");
 		ps.put("oTopic", "/topic/isDump");
-		
-        GenericMiddlewareLoader gml = new GenericMiddlewareLoader("nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader", ps);
+
+		GenericMiddlewareLoader gml = new GenericMiddlewareLoader("nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader", ps);
         middleware = gml.load();
 	}
 	

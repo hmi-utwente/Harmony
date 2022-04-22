@@ -23,7 +23,7 @@
       <dependency org="Asap"   name="AsapRealizerEmbodiments"     rev="latest.${resolve.status}"   />   
       <dependency org="Asap"   name="AsapBinding"         rev="latest.${resolve.status}"   /> 
       <dependency org="Asap"   name="AsapAudioEngine"     rev="latest.${resolve.status}"   />   
-        <dependency org="Asap" name="AsapEmitterEngine" rev="latest.${resolve.status}"/>
+      <dependency org="Asap" name="AsapEmitterEngine" rev="latest.${resolve.status}"/>
       
       <dependency org="slf4j"     name="slf4j-api"               rev="latest.release"  />   
       <dependency org="jcip"    name="jcip-annotations"      rev="latest.release"  />
@@ -32,11 +32,9 @@
       <dependency org="google"   name="guava"                rev="latest.${resolve.status}"  />
       <dependency org="lombok"   name="lombok"         rev="latest.release"  />
 	  <dependency org="saiba"     name="openbmlparser"           rev="latest.release"    />
-
-	
-    <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="latest.release"/>
-    <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="latest.release"/>
-    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="latest.release"/>
+      <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="latest.release"/>
+      <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="latest.release"/>
+      <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="latest.release"/>
 
    </dependencies>
 </ivy-module>
