@@ -1,6 +1,6 @@
 <behaviourtemplates>
 
-    <is name="example">
+    <is name="ct">
         {
         "value" : 1,
         "cascade" : "CX.*"
