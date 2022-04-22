@@ -36,6 +36,8 @@
       <dependency org="com.fasterxml.jackson.core" name="jackson-databind"    rev="latest.release"/>
       <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="latest.release"/>
       <dependency org="org.glassfish"              name="javax.json"          rev="latest.release"/>
+      <dependency org="org.graalvm.js" name="js-scriptengine" rev="22.0.0.2"/>
+      <dependency org="org.graalvm.js" name="js" rev="22.0.0.2"/>
 
    </dependencies>
 </ivy-module>
