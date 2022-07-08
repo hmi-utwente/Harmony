@@ -59,15 +59,13 @@ public class FlipperDialogStarter extends FlipperLauncherThread {
 
 	private void initMW() {
 		Properties ps = new Properties();
-		ps.put("subscriber", "/dummy_in");
-		ps.put("publisher", "/is_dump");
 
 		// For loading Apache artemis middleware
 		// GenericMiddlewareLoader gml = new GenericMiddlewareLoader("nl.utwente.hmi.middleware.stomp.STOMPMiddlewareLoader", ps);
 
 		// For loading ROS1 middleware
-		GenericMiddlewareLoader gml = new GenericMiddlewareLoader("nl.utwente.hmi.middleware.ros.ROSMiddlewareLoader", ps);
-        middleware = gml.load();
+		//GenericMiddlewareLoader gml = new GenericMiddlewareLoader("nl.utwente.hmi.middleware.ros.ROSMiddlewareLoader", ps);
+        //middleware = gml.load();
 	}
 	
 	public static void main(String[] args) {

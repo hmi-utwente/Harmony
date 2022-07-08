@@ -1,0 +1,74 @@
+<behaviourtemplates>
+
+    <is name="connectModules">
+        {
+        "flipper_initialised": false,
+        "flipper_message": false,
+        "rawROSMessage": "",
+        "rosMessage": "",
+        "testMessage":"red_blink_1"
+        }
+    </is>
+
+    <!-- JS function to check the raw message input. Currently, doesn't do anything but can be edited -->
+    <javascript>
+        <![CDATA[
+            function parseROSMessage(message){
+                return message;
+            }
+        ]]>
+    </javascript>
+
+    <template id="initFlipperListener" name="initFlipperListener">
+
+        <preconditions>
+            <condition> is.connectModules.flipper_initialised === false</condition>
+        </preconditions>
+        <effects>
+            <method name ="isConnected">
+                <object persistent="robotBehaviour" class="flipper.FlipperMiddleware">
+                    <constructors>
+                        <value class = "String" constant="Prototype1/config/behaviourNode.properties"/>
+                    </constructors>
+                </object>
+            </method>
+            <assign is="is.connectModules.flipper_initialised"> true </assign>
+        </effects>
+    </template>
+
+    <template id="receiveROSMessage" name="receiveROSMessage">
+        <preconditions>
+            <condition> is.connectModules.flipper_initialised === true</condition>
+            <method name="hasMessage">
+                <object persistent="robotBehaviour" class="flipper.FlipperMiddleware"/>
+                    <arguments></arguments>
+            </method>
+        </preconditions>
+        <effects>
+            <method is="is.connectModules.rawROSMessage" is_type="JSONString" name="getMessage">
+                <object persistent="robotBehaviour" class="flipper.FlipperMiddleware"/>
+                    <arguments></arguments>
+            </method>
+            <assign is="is.connectModules.rosMessage">parseROSMessage(is.connectModules.rawROSMessage) </assign>
+        </effects>
+    </template>
+
+    <template id="sendMessageToROS" name="sendMessageToROS">
+        <preconditions>
+            <condition> is.connectModules.flipper_message === false</condition>
+            <condition> is.connectModules.rosMessage !== ""</condition>
+        </preconditions>
+        <effects>
+            <method name ="send">
+                <object persistent="robotBehaviour" class="flipper.FlipperMiddleware">
+                </object>
+                <arguments>
+                    <value class="String" is="is.connectModules.testMessage" is_type="JSONString" />
+                </arguments>
+            </method>
+            <assign is="is.connectModules.flipper_message"> true </assign>
+        </effects>
+    </template>
+
+
+</behaviourtemplates>

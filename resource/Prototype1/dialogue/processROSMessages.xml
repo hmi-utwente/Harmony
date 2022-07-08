@@ -1,0 +1,35 @@
+<behaviourtemplates>
+
+    <is name="rosInputProcessor">
+        {
+        "test" : false,
+        "message.test.processed" : false
+        }
+    </is>
+
+    <template id="receiveTestMessage" name="receiveTestMessage">
+
+        <preconditions>
+            <condition> is.rosInputProcessor.message.test.processed === false</condition>
+        </preconditions>
+
+        <effects>
+            <assign is="is.rosInputProcessor.message.test.processed"> true </assign>
+        </effects>
+
+    </template>
+
+    <template id="procesTestMessage" name="processTestMessage">
+
+        <preconditions>
+            <condition> is.rosInputProcessor.test === false</condition>
+        </preconditions>
+
+        <effects>
+            <assign is="is.rosInputProcessor.test"> true </assign>
+        </effects>
+
+    </template>
+
+
+</behaviourtemplates>

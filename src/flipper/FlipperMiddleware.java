@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import nl.utwente.hmi.middleware.Middleware;
 import nl.utwente.hmi.middleware.MiddlewareListener;
 import nl.utwente.hmi.middleware.helpers.JsonNodeBuilders.ObjectNodeBuilder;
@@ -48,14 +50,16 @@ public class FlipperMiddleware implements MiddlewareListener {
 	
 	// { "content": "$data" }
 	public void send(String data) {
-        ObjectNodeBuilder on = object();
-        try {
-			on.with("content", URLEncoder.encode(data, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return;
+		//ObjectNodeBuilder on = object();
+
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode jsonNode = objectMapper.readTree(data);
+
+			middleware.sendData(jsonNode);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-        middleware.sendData(on.end());
 	}
 	
 	public boolean hasMessage() {
